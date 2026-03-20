@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Anatomy Mastery - Biology 20</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        body { 
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* SVG Heart Styles - Pure Vector, Zero External Images */
+        #heart-diagram .part {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            stroke: #334155;
+            stroke-width: 1.5;
+            stroke-linejoin: round;
+        }
+        
+        #heart-diagram .part:hover {
+            filter: brightness(1.2) drop-shadow(0 0 8px rgba(255,255,255,0.6));
+            stroke: #fff;
+            stroke-width: 3;
+        }
+        
+        #heart-diagram .selected-pulse {
+            stroke: #f59e0b !important;
+            stroke-width: 5 !important;
+            animation: pulse-glow 1.5s infinite linear;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 2px #f59e0b); }
+            50% { filter: drop-shadow(0 0 15px #fbbf24); }
+        }
+
+        /* Solved Mastery States */
+        #heart-diagram .vessel-blue { fill: url(#blue-grad); }
+        #heart-diagram .vessel-red { fill: url(#red-grad); }
+        #heart-diagram .muscle-red { fill: url(#muscle-grad); }
+        #heart-diagram .valve-white { fill: url(#valve-grad); }
+        
+        #heart-diagram .unsolved { filter: grayscale(0.4) brightness(0.9); opacity: 0.85; }
+        
+        #heart-diagram .solved { 
+            filter: none !important; 
+            opacity: 1 !important;
+            stroke: rgba(255,255,255,0.8);
+            stroke-width: 2;
+        }
+
+        .label-text {
+            font-size: 14px;
+            font-weight: 800;
+            fill: #1e293b;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 0 2px white);
+        }
+        .label-text.visible { opacity: 1; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .error-shake { animation: shake 0.4s ease-in-out; border-color: #ef4444 !important; }
+
+        .btn-word {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-word:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+<div class="max-w-7xl mx-auto">
+    <header class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <div>
+            <span class="inline-block px-4 py-1 bg-blue-600 text-white text-xs font-black rounded-full mb-3 tracking-widest uppercase">Alberta Bio 20 Curriculum</span>
+            <h1 class="text-5xl font-extrabold text-slate-900 tracking-tight">Heart Anatomy Mastery</h1>
+            <p class="text-slate-500 mt-2 text-lg">Interactive Structural & Functional Analysis</p>
+        </div>
+        
+        <div class="w-full md:w-80">
+            <div class="flex justify-between mb-2 px-1">
+                <span class="text-sm font-bold text-slate-400">MASTERY PROGRESS</span>
+                <span class="text-sm font-black text-blue-600"><span id="solved-count">0</span> / 11</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden shadow-inner">
+                <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-1000 ease-out"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Interactive Vector Diagram - Self Contained -->
+        <div class="lg:col-span-8 flex justify-center items-center py-6">
+            <div class="relative w-full max-w-2xl">
+                <svg id="heart-diagram" viewBox="0 0 500 500" class="w-full h-auto drop-shadow-2xl">
+                    <defs>
+                        <linearGradient id="blue-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" /><stop offset="100%" stop-color="#1e40af" />
+                        </linearGradient>
+                        <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fb7185" /><stop offset="100%" stop-color="#9f1239" />
+                        </linearGradient>
+                        <linearGradient id="muscle-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fda4af" /><stop offset="50%" stop-color="#e11d48" /><stop offset="100%" stop-color="#881337" />
+                        </linearGradient>
+                        <linearGradient id="valve-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" /><stop offset="100%" stop-color="#94a3b8" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Vena Cava (Blue) -->
+                    <path id="vena_cava" class="part vessel-blue unsolved" d="M 160 30 Q 185 30 185 100 L 140 100 Q 140 30 160 30 Z M 160 330 Q 185 330 185 430 L 140 430 Q 120 330 160 330 Z" />
+                    
+                    <!-- Right Atrium (Blue) -->
+                    <path id="right_atrium" class="part vessel-blue unsolved" d="M 140 100 Q 80 140 95 220 Q 105 270 180 280 L 220 280 L 220 180 Q 220 110 185 100 Z" />
+                    
+                    <!-- Tricuspid Valve -->
+                    <rect id="tricuspid_valve" class="part valve-white unsolved" transform="rotate(-15 170 270)" x="120" y="270" width="80" height="15" rx="8" />
+                    
+                    <!-- Right Ventricle (Blue) -->
+                    <path id="right_ventricle" class="part vessel-blue unsolved" d="M 115 285 Q 100 380 180 440 Q 210 460 230 460 L 230 285 Z" />
+                    
+                    <!-- Septum (Thick Muscle) -->
+                    <path id="septum" class="part muscle-red unsolved" d="M 220 180 L 250 180 L 265 460 L 230 460 Z" />
+                    
+                    <!-- Left Atrium (Red) -->
+                    <path id="left_atrium" class="part muscle-red unsolved" d="M 250 170 Q 330 140 370 200 Q 380 260 340 280 L 250 280 Z" />
+                    
+                    <!-- Bicuspid (Mitral) Valve -->
+                    <rect id="bicuspid_valve" class="part valve-white unsolved" transform="rotate(15 290 270)" x="245" y="270" width="80" height="15" rx="8" />
+                    
+                    <!-- Left Ventricle (Thick Red Muscle) -->
+                    <path id="left_ventricle" class="part muscle-red unsolved" d="M 250 285 L 345 285 Q 400 390 300 480 Q 275 495 245 475 L 245 460 L 265 460 L 250 285 Z" />
+                    
+                    <!-- Pulmonary Artery (Blue Arch) -->
+                    <path id="pulmonary_artery" class="part vessel-blue unsolved" d="M 180 200 Q 180 110 300 90 Q 335 85 345 105 L 315 130 Q 300 110 240 120 Q 215 125 215 165 L 180 180 Z" />
+
+                    <!-- Aorta (Great Red Arch) -->
+                    <path id="aorta" class="part vessel-red unsolved" d="M 220 140 Q 220 40 300 25 Q 360 20 385 75 L 345 95 Q 330 55 300 60 Q 255 65 255 130 Z" />
+                    <!-- Brachiocephalic/Carotid/Subclavian -->
+                    <path fill="#9f1239" stroke="#334155" stroke-width="2" d="M 275 38 L 265 5 M 305 28 L 305 0 M 335 32 L 345 2" style="pointer-events: none;" />
+                    
+                    <!-- Pulmonary Veins (Red) -->
+                    <path id="pulmonary_veins" class="part vessel-red unsolved" d="M 365 180 L 420 165 L 425 190 L 370 205 Z M 370 215 L 425 210 L 430 235 L 375 240 Z M 130 180 L 75 165 L 70 190 L 125 205 Z M 125 215 L 70 210 L 65 235 L 120 240 Z" />
+
+                    <!-- Structural Labels (Revealed on Mastery) -->
+                    <text x="115" y="195" class="label-text" data-part="right_atrium">Right Atrium</text>
+                    <text x="135" y="380" class="label-text" data-part="right_ventricle">Right Ventricle</text>
+                    <text x="275" y="205" class="label-text" data-part="left_atrium">Left Atrium</text>
+                    <text x="280" y="380" class="label-text" data-part="left_ventricle">Left Ventricle</text>
+                    <text x="50" y="200" class="label-text" data-part="pulmonary_veins">Pulm. Veins</text>
+                    <text x="360" y="28" class="label-text" data-part="aorta">Aorta</text>
+                    <text x="125" y="75" class="label-text" data-part="vena_cava">Vena Cava</text>
+                    <text x="248" y="320" class="label-text" data-part="septum" writing-mode="vertical-rl" font-size="12">Septum</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Sidebar UI -->
+        <div class="lg:col-span-4 space-y-8">
+            <section class="glass-panel p-8">
+                <h2 class="text-2xl font-black text-slate-800 mb-1">Word Bank</h2>
+                <p class="text-slate-500 text-sm mb-6">Analyze and select the correct structure.</p>
+                
+                <div id="word-bank" class="flex flex-wrap gap-2"></div>
+                
+                <div id="status-hint" class="mt-8 p-6 rounded-3xl bg-slate-50/50 border border-slate-100 flex items-start gap-4">
+                    <div class="text-2xl">💡</div>
+                    <p id="hint-text" class="text-slate-600 text-sm font-medium leading-relaxed">Choose a term from the word bank to begin.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Interactive Quiz Modal -->
+    <div id="quiz-panel" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="w-full max-w-5xl bg-white rounded-t-[3rem] p-8 md:p-12 shadow-2xl transform translate-y-20 transition-transform duration-500" id="quiz-card">
+            <div class="flex items-center gap-6 mb-10">
+                <div id="q-color" class="w-16 h-16 rounded-3xl flex items-center justify-center text-3xl shadow-lg border-b-4 border-slate-300">🫀</div>
+                <div>
+                    <span id="q-category" class="text-xs font-black uppercase tracking-widest text-blue-600">STRUCTURE VERIFIED</span>
+                    <h3 id="q-target" class="text-3xl font-extrabold text-slate-900 tracking-tight">Part Name</h3>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="flex flex-col justify-center">
+                    <p id="q-text" class="text-2xl font-bold text-slate-800 leading-snug">Test question here?</p>
+                </div>
+                <div id="q-options" class="flex flex-col gap-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="win-modal" class="fixed inset-0 bg-white z-[100] hidden items-center justify-center p-6 text-center">
+        <div class="max-w-md">
+            <div class="text-8xl mb-6">🏆</div>
+            <h2 class="text-5xl font-black text-slate-900 mb-4 tracking-tighter">Bio 20 Mastery</h2>
+            <p class="text-slate-500 text-xl font-light mb-10 leading-relaxed">You have flawlessly mapped the circulatory engine of the human body.</p>
+            <button onclick="location.reload()" class="w-full py-5 bg-blue-600 hover:bg-black text-white text-xl font-bold rounded-3xl transition-all shadow-xl">Reset Simulation</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const heartData = {
+        right_atrium: { name: "Right Atrium", color: "bg-blue-400", q: [
+            { t: "Whose job is it to receive deoxygenated blood from the body?", a: ["Right Atrium", "Left Atrium", "Right Ventricle"], c: 0 },
+            { t: "Where does the blood go immediately after this chamber?", a: ["To the Lungs", "Through the Tricuspid Valve", "Into the Aorta"], c: 1 }
+        ]},
+        right_ventricle: { name: "Right Ventricle", color: "bg-blue-600", q: [
+            { t: "This chamber pumps blood toward which destination?", a: ["The Brain", "The Lungs", "The Rest of Body"], c: 1 },
+            { t: "The blood in this chamber is:", a: ["Oxygen-Rich", "Oxygen-Poor/Deoxygenated", "Nutrient-Poor"], c: 1 }
+        ]},
+        left_atrium: { name: "Left Atrium", color: "bg-rose-400", q: [
+            { t: "What enters the Left Atrium from the Pulmonary Veins?", a: ["Deoxygenated blood", "Oxygenated blood", "Carbon Dioxide"], c: 1 },
+            { t: "After the Left Atrium, blood passes through the:", a: ["Bicuspid (Mitral) Valve", "Tricuspid Valve", "Septum"], c: 0 }
+        ]},
+        left_ventricle: { name: "Left Ventricle", color: "bg-rose-600", q: [
+            { t: "Why is the muscle wall thickest in this specific chamber?", a: ["To pump blood to the entire body.", "To withstand lung pressure.", "To store extra oxygen."], c: 0 },
+            { t: "Blood exits this massive chamber and enters the:", a: ["Pulmonary Artery", "Aorta", "Vena Cava"], c: 1 }
+        ]},
+        aorta: { name: "Aorta", color: "bg-red-700", q: [
+            { t: "The Aorta is the largest ______ in the human body.", a: ["Vein", "Artery", "Capillary"], c: 1 },
+            { t: "Does the Aorta carry blood to the Lungs or the Body?", a: ["The Body", "The Lungs", "The Heart Muscle only"], c: 0 }
+        ]},
+        pulmonary_artery: { name: "Pulmonary Artery", color: "bg-blue-800", q: [
+            { t: "Unlike most arteries, this one carries:", a: ["Oxygenated blood", "Deoxygenated blood", "Mixed blood"], c: 1 },
+            { t: "It leaves the heart and heads straight for the:", a: ["Kidneys", "Lungs", "Brain"], c: 1 }
+        ]},
+        pulmonary_veins: { name: "Pulmonary Veins", color: "bg-pink-400", q: [
+            { t: "These vessels return blood back to the heart from the:", a: ["Liver", "Lungs", "Stomach"], c: 1 },
+            { t: "The blood inside these veins is unique because it is:", a: ["High in Oxygen", "High in CO2", "Low in Pressure"], c: 0 }
+        ]},
+        vena_cava: { name: "Vena Cava", color: "bg-slate-700", q: [
+            { t: "The Superior and Inferior Vena Cava empty into the:", a: ["Right Atrium", "Left Atrium", "Right Ventricle"], c: 0 },
+            { t: "Is the blood returning through these vessels deoxygenated?", a: ["Yes", "No", "Only some of it"], c: 0 }
+        ]},
+        septum: { name: "Septum", color: "bg-slate-500", q: [
+            { t: "What is the primary role of the cardiac Septum?", a: ["Pumping", "Separating Oxygenated/Deoxygenated blood", "Filtering"], c: 1 },
+            { t: "If the Septum had a hole, it would lead to:", a: ["Mixing of blood types", "Heart failure", "Nothing harmful"], c: 0 }
+        ]},
+        tricuspid_valve: { name: "Tricuspid Valve", color: "bg-slate-400", q: [
+            { t: "This valve prevents backflow into the:", a: ["Right Atrium", "Right Ventricle", "Aorta"], c: 0 },
+            { t: "Where is it located?", a: ["Right side of the heart", "Left side of the heart", "In the Aorta"], c: 0 }
+        ]},
+        bicuspid_valve: { name: "Bicuspid Valve", color: "bg-slate-300", q: [
+            { t: "The Bicuspid valve (Mitral) is located on the:", a: ["Right side", "Left side", "Top of heart"], c: 1 },
+            { t: "Backflow here would leak blood back into the:", a: ["Left Atrium", "Lungs", "Right Atrium"], c: 0 }
+        ]}
+    };
+
+    const state = {
+        mode: 'IDLE', // IDLE, CLICKING, QUIZ
+        target: null,
+        solved: new Set(),
+        qIndex: {}
+    };
+
+    function init() {
+        Object.keys(heartData).forEach(k => state.qIndex[k] = 0);
+        renderBank();
+        
+        document.querySelectorAll('.part').forEach(p => {
+            p.onclick = () => handlePartClick(p.id);
+            p.onmouseenter = () => {
+                if(state.mode === 'CLICKING' && state.target && !state.solved.has(p.id)) {
+                    p.classList.add('selected-pulse');
+                }
+            };
+            p.onmouseleave = () => p.classList.remove('selected-pulse');
+        });
+    }
+
+    function renderBank() {
+        const bank = document.getElementById('word-bank');
+        bank.innerHTML = '';
+        Object.keys(heartData).sort().forEach(k => {
+            const isDone = state.solved.has(k);
+            const b = document.createElement('button');
+            b.id = `wb-${k}`;
+            b.className = `btn-word px-4 py-2 text-sm font-black rounded-2xl border-2 transition-all ${isDone ? 'bg-slate-100 text-slate-300 border-transparent opacity-50 cursor-not-allowed' : state.target === k ? 'bg-blue-600 text-white border-blue-600 shadow-xl scale-105' : 'bg-white text-slate-700 border-slate-200 hover:border-blue-400'}`;
+            b.textContent = heartData[k].name;
+            b.disabled = isDone;
+            b.onclick = () => selectTerm(k);
+            bank.appendChild(b);
+        });
+    }
+
+    function selectTerm(k) {
+        if(state.mode === 'QUIZ') return;
+        state.target = state.target === k ? null : k;
+        state.mode = state.target ? 'CLICKING' : 'IDLE';
+        renderBank();
+        document.getElementById('hint-text').textContent = state.target ? `Locate the ${heartData[k].name} on the heart diagram.` : "Select a term from the bank to begin.";
+    }
+
+    function handlePartClick(id) {
+        if(state.mode !== 'CLICKING' || !state.target || state.solved.has(id)) return;
+        
+        if(id === state.target) {
+            state.mode = 'QUIZ';
+            showQuiz();
+        } else {
+            document.getElementById(`wb-${state.target}`).classList.add('error-shake');
+            setTimeout(() => document.getElementById(`wb-${state.target}`).classList.remove('error-shake'), 400);
+            document.getElementById('hint-text').textContent = "That's not it. Try identified the correct structure again.";
+        }
+    }
+
+    function showQuiz() {
+        const data = heartData[state.target];
+        const qData = data.q[state.qIndex[state.target]];
+        
+        document.getElementById('q-target').textContent = data.name;
+        document.getElementById('q-color').className = `w-16 h-16 rounded-3xl flex items-center justify-center text-3xl shadow-lg border-b-4 ${data.color} text-white font-bold`;
+        document.getElementById('q-text').textContent = qData.t;
+        
+        const opts = document.getElementById('q-options');
+        opts.innerHTML = '';
+        
+        qData.a.forEach((ans, i) => {
+            const b = document.createElement('button');
+            b.className = "text-left w-full px-8 py-5 rounded-3xl border-2 border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-300 font-bold text-slate-700 transition-all";
+            b.textContent = ans;
+            b.onclick = () => {
+                if(i === qData.c) {
+                    b.className = "text-left w-full px-8 py-5 rounded-3xl border-2 border-green-500 bg-green-50 text-green-700 font-black";
+                    setTimeout(handleWin, 800);
+                } else {
+                    b.className = "text-left w-full px-8 py-5 rounded-3xl border-2 border-red-500 bg-red-50 text-red-700 font-bold error-shake";
+                    setTimeout(() => {
+                        state.qIndex[state.target] = (state.qIndex[state.target] + 1) % data.q.length;
+                        showQuiz();
+                    }, 800);
+                }
+            };
+            opts.appendChild(b);
+        });
+
+        const panel = document.getElementById('quiz-panel');
+        panel.classList.remove('hidden');
+        setTimeout(() => {
+            panel.classList.add('opacity-100');
+            document.getElementById('quiz-card').classList.remove('translate-y-20');
+        }, 10);
+    }
+
+    function handleWin() {
+        state.solved.add(state.target);
+        
+        // Permanent style update
+        const el = document.getElementById(state.target);
+        el.classList.add('solved');
+        el.classList.remove('unsolved');
+        
+        // Label reveal
+        const label = document.querySelector(`.label-text[data-part="${state.target}"]`);
+        if(label) label.classList.add('visible');
+
+        // Progress
+        document.getElementById('solved-count').textContent = state.solved.size;
+        document.getElementById('progress-bar').style.width = `${(state.solved.size / 11) * 100}%`;
+
+        // Reset state
+        const panel = document.getElementById('quiz-panel');
+        panel.classList.remove('opacity-100');
+        document.getElementById('quiz-card').classList.add('translate-y-20');
+        
+        setTimeout(() => {
+            panel.classList.add('hidden');
+            state.mode = 'IDLE';
+            state.target = null;
+            renderBank();
+            document.getElementById('hint-text').textContent = "Part mastered! Select your next target.";
+            
+            if(state.solved.size >= 11) {
+                document.getElementById('win-modal').classList.remove('hidden');
+                document.getElementById('win-modal').classList.add('flex');
+            }
+        }, 500);
+    }
+
+    init();
+</script>
+</body>
+</html>
