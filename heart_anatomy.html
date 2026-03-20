@@ -194,8 +194,8 @@
     </main>
 
     <!-- Interactive Quiz Modal -->
-    <div id="quiz-panel" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-end justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="w-full max-w-5xl bg-white rounded-t-[3rem] p-8 md:p-12 shadow-2xl transform translate-y-20 transition-transform duration-500" id="quiz-card">
+    <div id="quiz-panel" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-6 hidden opacity-0 transition-opacity duration-300">
+        <div class="w-full max-w-4xl bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl transform scale-95 transition-transform duration-300" id="quiz-card">
             <div class="flex items-center gap-6 mb-10">
                 <div id="q-color" class="w-16 h-16 rounded-3xl flex items-center justify-center text-3xl shadow-lg border-b-4 border-slate-300">🫀</div>
                 <div>
@@ -227,48 +227,81 @@
 <script>
     const heartData = {
         right_atrium: { name: "Right Atrium", color: "bg-blue-400", q: [
-            { t: "Whose job is it to receive deoxygenated blood from the body?", a: ["Right Atrium", "Left Atrium", "Right Ventricle"], c: 0 },
-            { t: "Where does the blood go immediately after this chamber?", a: ["To the Lungs", "Through the Tricuspid Valve", "Into the Aorta"], c: 1 }
+            { t: "The right atrium receives blood from which vessels?", a: ["Pulmonary veins and aorta", "Superior and inferior vena cavae", "Coronary arteries and pulmonary trunk", "Pulmonary artery and aortic arch"], c: 1 },
+            { t: "The blood delivered to the right atrium has a relatively ______ partial pressure of oxygen (pO₂) compared to arterial blood.", a: ["Higher — it's just been oxygenated", "Equal — oxygen is balanced across chambers", "Lower — O₂ was exchanged in systemic capillaries", "Absent — the right side carries no oxygen"], c: 2 },
+            { t: "The right atrium contracts and pushes blood through which valve into the next chamber?", a: ["Bicuspid (mitral) valve", "Aortic semilunar valve", "Pulmonary semilunar valve", "Tricuspid (right atrioventricular) valve"], c: 3 },
+            { t: "During which phase of the cardiac cycle does the right atrium fill with returning venous blood?", a: ["Ventricular systole", "Isovolumetric contraction", "Ventricular diastole (atrial filling)", "Ventricular ejection"], c: 2 },
+            { t: "The sinoatrial (SA) node, which initiates the electrical impulse for each heartbeat, is located in the wall of the:", a: ["Left ventricle", "Right atrium", "Interventricular septum", "Left atrium"], c: 1 }
         ]},
         right_ventricle: { name: "Right Ventricle", color: "bg-blue-600", q: [
-            { t: "This chamber pumps blood toward which destination?", a: ["The Brain", "The Lungs", "The Rest of Body"], c: 1 },
-            { t: "The blood in this chamber is:", a: ["Oxygen-Rich", "Oxygen-Poor/Deoxygenated", "Nutrient-Poor"], c: 1 }
+            { t: "The right ventricle pumps blood into which vessel, and toward which destination?", a: ["Aorta → systemic circulation", "Pulmonary artery → lungs for gas exchange", "Vena cava → venous return", "Coronary artery → heart muscle"], c: 1 },
+            { t: "Why is the myocardium (muscle wall) of the right ventricle THINNER than that of the left ventricle?", a: ["It carries oxygenated blood so less force is needed", "Blood volume is lower in the right side", "Pulmonary resistance is much lower than systemic resistance", "The right atrium does most of the work for it"], c: 2 },
+            { t: "The blood within the right ventricle is best described as:", a: ["Oxygenated, high-pressure arterial blood", "Deoxygenated, relatively low-pressure venous blood", "A 50/50 mix of oxygenated and deoxygenated blood", "Oxygenated but low pressure"], c: 1 },
+            { t: "Which valve prevents backflow of blood from the pulmonary artery back into the right ventricle?", a: ["Tricuspid valve", "Bicuspid valve", "Aortic semilunar valve", "Pulmonary semilunar valve"], c: 3 },
+            { t: "During right ventricular systole, what sequence of events occurs?", a: ["SA node fires → AV node activates → bundle of His → Purkinje fibers → ventricular contraction", "AV node fires first → atria contract → ventricles fill", "Purkinje fibers fire independently → semilunar valves open first", "Chordae tendineae pull the valves open to allow ejection"], c: 0 }
         ]},
         left_atrium: { name: "Left Atrium", color: "bg-rose-400", q: [
-            { t: "What enters the Left Atrium from the Pulmonary Veins?", a: ["Deoxygenated blood", "Oxygenated blood", "Carbon Dioxide"], c: 1 },
-            { t: "After the Left Atrium, blood passes through the:", a: ["Bicuspid (Mitral) Valve", "Tricuspid Valve", "Septum"], c: 0 }
+            { t: "The left atrium receives oxygenated blood from the lungs via the:", a: ["Superior vena cava", "Pulmonary arteries (2 left, 2 right)", "Coronary sinus", "Pulmonary veins (typically 4 total)"], c: 3 },
+            { t: "What is unique about the blood in the pulmonary veins delivering blood to the left atrium?", a: ["It is deoxygenated, unlike most veins", "It is oxygenated — the opposite of most veins which carry deoxygenated blood", "It has a high CO₂ concentration", "It has no red blood cells"], c: 1 },
+            { t: "The left atrium drains into the left ventricle through which structure?", a: ["Aortic semilunar valve", "Pulmonary semilunar valve", "Tricuspid valve", "Bicuspid (mitral) valve"], c: 3 },
+            { t: "Mitral stenosis is a condition where the bicuspid/mitral valve is partially blocked. How would this affect the left atrium?", a: ["It would enlarge with backed-up blood (atrial dilation)", "It would shrink from lack of blood flow", "Pressure would drop sharply", "The right atrium would take over its function"], c: 0 },
+            { t: "The wall of the left atrium is slightly thicker than the right atrium because:", a: ["It pumps blood to the entire body", "It must overcome higher pressure to force blood into the left ventricle", "It receives blood at higher velocity", "It contains the SA node"], c: 1 }
         ]},
         left_ventricle: { name: "Left Ventricle", color: "bg-rose-600", q: [
-            { t: "Why is the muscle wall thickest in this specific chamber?", a: ["To pump blood to the entire body.", "To withstand lung pressure.", "To store extra oxygen."], c: 0 },
-            { t: "Blood exits this massive chamber and enters the:", a: ["Pulmonary Artery", "Aorta", "Vena Cava"], c: 1 }
+            { t: "The left ventricle ejects blood directly into the:", a: ["Pulmonary artery", "Superior vena cava", "Aorta via the aortic semilunar valve", "Coronary sinus"], c: 2 },
+            { t: "The left ventricle has the THICKEST myocardial wall in the heart. This is because it must generate enough pressure to:", a: ["Pump blood through pulmonary resistance", "Pump blood to the entire systemic circuit — head, organs, and extremities", "Overcome the back-pressure of the vena cava", "Filter blood through the kidneys at high speed"], c: 1 },
+            { t: "Cardiac output is defined as heart rate × stroke volume. If the left ventricle has a stroke volume of 70 mL and beats 72 times/min, what is the approximate cardiac output?", a: ["5.0 L/min", "5.04 L/min", "7.2 L/min", "2.5 L/min"], c: 1 },
+            { t: "What happens to the left ventricle during isovolumetric contraction?", a: ["Both AV and semilunar valves are closed; ventricle pressure rises with no volume change", "The aortic valve opens and blood begins to eject", "The mitral valve opens to allow ventricular filling", "The septum bulges left, reducing chamber volume"], c: 0 },
+            { t: "Hypertension (high blood pressure) over time causes hypertrophy of the left ventricular wall because:", a: ["Higher pressure in the aorta forces the ventricle walls to thicken to generate more force", "Blood backs up from the lungs", "The AV node sends faster signals", "The septum weakens and the left ventricle compensates"], c: 0 }
         ]},
         aorta: { name: "Aorta", color: "bg-red-700", q: [
-            { t: "The Aorta is the largest ______ in the human body.", a: ["Vein", "Artery", "Capillary"], c: 1 },
-            { t: "Does the Aorta carry blood to the Lungs or the Body?", a: ["The Body", "The Lungs", "The Heart Muscle only"], c: 0 }
+            { t: "The aorta carries blood away from the left ventricle. The blood within it is:", a: ["Deoxygenated and high-pressure", "Oxygenated and high-pressure", "Oxygenated and low-pressure", "Mixed and medium-pressure"], c: 1 },
+            { t: "The aortic arch gives off three main branches that supply the head and arms. Which of the following is NOT one of them?", a: ["Brachiocephalic trunk", "Left common carotid artery", "Left subclavian artery", "Left pulmonary artery"], c: 3 },
+            { t: "After the arch, the descending aorta becomes the thoracic and then abdominal aorta. Which organ system does the abdominal aorta primarily branch to supply?", a: ["The lungs and heart", "The digestive organs, kidneys, and lower limbs", "The brain and spinal cord only", "The coronary arteries and pericardium"], c: 1 },
+            { t: "An aortic aneurysm is a dangerous bulging/weakening of the aortic wall. Why is a rupture life-threatening?", a: ["Blood backs up into the lungs, causing pulmonary edema", "The aorta carries the entire cardiac output, so rupture causes massive hemorrhage and loss of perfusion", "Blood flow to the lungs stops immediately", "The heart compensates by reducing rate"], c: 1 },
+            { t: "The aortic semilunar valve prevents blood from flowing back into the left ventricle during:", a: ["Ventricular systole (ejection phase)", "Ventricular diastole (relaxation)", "Atrial systole", "Isovolumetric filling"], c: 1 }
         ]},
         pulmonary_artery: { name: "Pulmonary Artery", color: "bg-blue-800", q: [
-            { t: "Unlike most arteries, this one carries:", a: ["Oxygenated blood", "Deoxygenated blood", "Mixed blood"], c: 1 },
-            { t: "It leaves the heart and heads straight for the:", a: ["Kidneys", "Lungs", "Brain"], c: 1 }
+            { t: "The pulmonary artery is unique among arteries because it carries:", a: ["Oxygenated blood at high pressure", "Deoxygenated blood toward the lungs", "Blood directly to the systemic circuit", "Nutrient-rich blood from the intestines"], c: 1 },
+            { t: "The pulmonary trunk divides into left and right pulmonary arteries. Where do these arteries ultimately deliver blood to undergo gas exchange?", a: ["Alveolar capillaries of the lungs", "The bronchi lining of the lungs", "The pleural cavity", "Bronchioles in the trachea"], c: 0 },
+            { t: "In gas exchange at the pulmonary capillaries, blood picks up O₂ and releases CO₂ by:", a: ["Active transport against concentration gradients", "Simple diffusion down partial pressure gradients", "Osmosis driven by blood pressure", "Carrier-mediated facilitated diffusion only"], c: 1 },
+            { t: "Pulmonary hypertension is elevated blood pressure in the pulmonary artery. This would directly cause which chamber to hypertrophy?", a: ["Left ventricle", "Right ventricle — it must pump against higher resistance", "Left atrium", "Right atrium"], c: 1 },
+            { t: "Which valve does the pulmonary artery exit through when blood leaves the right ventricle?", a: ["Tricuspid valve", "Bicuspid valve", "Pulmonary semilunar valve", "Aortic semilunar valve"], c: 2 }
         ]},
         pulmonary_veins: { name: "Pulmonary Veins", color: "bg-pink-400", q: [
-            { t: "These vessels return blood back to the heart from the:", a: ["Liver", "Lungs", "Stomach"], c: 1 },
-            { t: "The blood inside these veins is unique because it is:", a: ["High in Oxygen", "High in CO2", "Low in Pressure"], c: 0 }
+            { t: "The pulmonary veins defy the typical vein definition. What makes them unique?", a: ["They carry blood away from the heart", "They carry oxygenated blood (unlike most veins)", "They carry blood at arterial pressure", "They contain no valves and no red blood cells"], c: 1 },
+            { t: "Typically, there are how many pulmonary veins, and which chamber do they drain into?", a: ["2 veins → right atrium", "4 veins → left atrium", "4 veins → right atrium", "2 veins → left ventricle"], c: 1 },
+            { t: "After gas exchange in pulmonary capillaries, what specific change happens to the blood's hemoglobin before it enters the pulmonary veins?", a: ["Hemoglobin releases CO₂ and binds O₂ (oxyhemoglobin forms)", "Hemoglobin breaks apart to release iron", "CO₂ replaces O₂ on hemoglobin permanently", "Hemoglobin count decreases due to RBC destruction"], c: 0 },
+            { t: "If a pulmonary vein were blocked (e.g., by embolism), what would be the most immediate consequence?", a: ["The left atrium would receive less oxygenated blood, reducing systemic oxygen delivery", "The right ventricle would immediately fail", "Blood pressure in the aorta would rise sharply", "The tricuspid valve would close permanently"], c: 0 },
+            { t: "The pulmonary circuit (right heart → lungs → left heart) operates at much lower pressure than the systemic circuit. Why is low pulmonary pressure important?", a: ["High pressure would push fluid into alveoli, impairing gas exchange (pulmonary edema)", "Low pressure allows more blood to be stored in the lungs", "Lower pressure means less oxygen transport is needed", "It reduces the workload of the right atrium"], c: 0 }
         ]},
         vena_cava: { name: "Vena Cava", color: "bg-slate-700", q: [
-            { t: "The Superior and Inferior Vena Cava empty into the:", a: ["Right Atrium", "Left Atrium", "Right Ventricle"], c: 0 },
-            { t: "Is the blood returning through these vessels deoxygenated?", a: ["Yes", "No", "Only some of it"], c: 0 }
+            { t: "The superior vena cava drains blood from which region of the body?", a: ["Abdomen and lower limbs", "Head, neck, arms, and upper thorax", "The heart muscle itself via coronary veins", "The liver and digestive organs"], c: 1 },
+            { t: "The inferior vena cava returns blood from the lower body. It passes through which structure before entering the right atrium?", a: ["The diaphragm", "The left lung", "The pericardium only", "The right ventricle first"], c: 0 },
+            { t: "Blood returning through the vena cavae has already passed through systemic capillaries. What has changed about this blood?", a: ["O₂ was exchanged for CO₂ in tissues; it is now hypoxic and hypercapnic", "It has gained oxygen through diffusion from surrounding tissues", "CO₂ has been completely removed already", "The blood is now arterial since it's traveling toward the heart"], c: 0 },
+            { t: "Long periods of immobility (e.g., on a flight) can cause blood to pool in the inferior vena cava. This increases the risk of:", a: ["Arterial plaque in the aorta", "Deep vein thrombosis (DVT) and potential pulmonary embolism", "Pulmonary hypertension from excess oxygenation", "Valve failure in the left atrium"], c: 1 },
+            { t: "Unlike most veins, the vena cavae do not have valves. Blood is moved toward the heart primarily by:", a: ["Peristaltic pumping by vein walls", "Gravity, skeletal muscle contractions, and negative intrathoracic pressure during breathing", "The pressure from the left ventricle pushing backward", "Continuous arterial pressure from the aorta"], c: 1 }
         ]},
         septum: { name: "Septum", color: "bg-slate-500", q: [
-            { t: "What is the primary role of the cardiac Septum?", a: ["Pumping", "Separating Oxygenated/Deoxygenated blood", "Filtering"], c: 1 },
-            { t: "If the Septum had a hole, it would lead to:", a: ["Mixing of blood types", "Heart failure", "Nothing harmful"], c: 0 }
+            { t: "The interventricular septum separates which two chambers?", a: ["Right and left atria", "Right and left ventricles", "Right atrium and right ventricle", "Left atrium and left ventricle"], c: 1 },
+            { t: "A ventricular septal defect (VSD) is a hole between the ventricles. Because left ventricular pressure is higher than right, blood would shunt in which direction?", a: ["Right → left (deoxygenated blood enters systemic circulation)", "Left → right (oxygenated blood enters pulmonary circuit — volume overload)", "No shunting would occur across a small opening", "The shunt direction reverses with each heartbeat"], c: 1 },
+            { t: "The conduction system travels through the interventricular septum via which specialized tissue?", a: ["Sinoatrial (SA) node fibers alone", "The Bundle of His (atrioventricular bundle) and left/right bundle branches", "Gap junctions in the endocardium only", "Chordae tendineae anchored to the papillary muscles"], c: 1 },
+            { t: "During fetal development, the foramen ovale is an opening in the interatrial septum. What is its normal fate after birth?", a: ["It remains open to allow oxygenated blood to bypass the lungs", "It closes and becomes the fossa ovalis as pulmonary circulation begins", "It migrates to the interventricular septum", "It closes only if the infant breathes immediately"], c: 1 },
+            { t: "Why is the interventricular septum considered part of the left ventricle's wall structurally?", a: ["Because it is equally thick on both sides", "Because it bulges toward the right ventricle and its thickness matches the left ventricular wall", "Because it receives stimulation only from the left bundle branch", "Because left atrial pressure keeps it in place"], c: 1 }
         ]},
         tricuspid_valve: { name: "Tricuspid Valve", color: "bg-slate-400", q: [
-            { t: "This valve prevents backflow into the:", a: ["Right Atrium", "Right Ventricle", "Aorta"], c: 0 },
-            { t: "Where is it located?", a: ["Right side of the heart", "Left side of the heart", "In the Aorta"], c: 0 }
+            { t: "The tricuspid valve is also called the right atrioventricular (AV) valve. When does it open?", a: ["During ventricular systole, when ventricular pressure rises", "During ventricular diastole, when ventricular pressure drops below atrial pressure", "When the SA node fires", "When the semilunar valves close"], c: 1 },
+            { t: "The tricuspid valve has how many cusps (leaflets), and what structure prevents them from inverting into the atrium when the ventricle contracts?", a: ["2 cusps — held by papillary muscles and chordae tendineae", "3 cusps — held by chordae tendineae attached to papillary muscles", "3 cusps — held in place by ventricular blood pressure alone", "4 cusps — anchored directly to the ventricular wall"], c: 1 },
+            { t: "Tricuspid regurgitation means the valve does not seal completely during systole. What would you hear and what would happen hemodynamically?", a: ["A systolic murmur as blood leaks back into the right atrium, reducing forward flow", "A diastolic murmur as blood leaks into the right ventricle", "No murmur — regurgitation is silent", "Blood would backflow into the pulmonary veins"], c: 0 },
+            { t: "Rheumatic fever can damage heart valves including the tricuspid. The primary cause of valvular scarring in rheumatic heart disease is:", a: ["A bacterial toxin that directly dissolves valve collagen", "An autoimmune cross-reaction where antibodies against Streptococcus also attack cardiac tissue", "Viral infection of the pericardium spreading to valves", "Hypertension causing valve calcification"], c: 1 },
+            { t: "If the chordae tendineae of the tricuspid valve rupture, what would be the result?", a: ["The valve would prolapse into the right atrium during systole, causing severe regurgitation", "The valve would permanently fuse, causing stenosis", "Blood flow from the atrium would be blocked", "The papillary muscles would compensate with no clinical effect"], c: 0 }
         ]},
         bicuspid_valve: { name: "Bicuspid Valve", color: "bg-slate-300", q: [
-            { t: "The Bicuspid valve (Mitral) is located on the:", a: ["Right side", "Left side", "Top of heart"], c: 1 },
-            { t: "Backflow here would leak blood back into the:", a: ["Left Atrium", "Lungs", "Right Atrium"], c: 0 }
+            { t: "The bicuspid (mitral) valve is the left AV valve. It prevents backflow from the:", a: ["Left ventricle into the aorta", "Left ventricle back into the left atrium", "Left atrium back into the pulmonary veins", "Aorta back into the body"], c: 1 },
+            { t: "Mitral valve prolapse occurs when one or both leaflets bulge back into the left atrium during ventricular systole. Which symptom is most classically associated with this?", a: ["A mid-systolic click heard on auscultation", "A continuous machine-like murmur", "A diastolic murmur that worsens with exertion", "Sudden complete valve fusion"], c: 0 },
+            { t: "The mitral valve has two cusps (unlike the tricuspid's three). Why this matters clinically is that the mitral valve is the MOST commonly affected valve in rheumatic heart disease because:", a: ["It is exposed to the highest pressure in the heart", "It has fewer cusps and less structural support", "It handles more blood volume than all other valves", "It is the closest valve to the SA node"], c: 0 },
+            { t: "Mitral stenosis (narrowing) would most directly cause which pathophysiology?", a: ["The right ventricle hypertrophies from increased pulmonary resistance", "Blood backs up into the left atrium and pulmonary veins, causing pulmonary congestion", "The aortic root dilates from increased pressure", "The tricuspid valve becomes incompetent secondarily"], c: 1 },
+            { t: "During isovolumetric relaxation of the left ventricle, which valves are closed?", a: ["Aortic valve open, mitral valve closed", "Both aortic and mitral valves are closed", "Mitral valve open, aortic valve closed", "Both valves are open during this phase"], c: 1 }
         ]}
     };
 
@@ -364,7 +397,8 @@
         panel.classList.remove('hidden');
         setTimeout(() => {
             panel.classList.add('opacity-100');
-            document.getElementById('quiz-card').classList.remove('translate-y-20');
+            document.getElementById('quiz-card').classList.remove('scale-95');
+            document.getElementById('quiz-card').classList.add('scale-100');
         }, 10);
     }
 
@@ -387,7 +421,8 @@
         // Reset state
         const panel = document.getElementById('quiz-panel');
         panel.classList.remove('opacity-100');
-        document.getElementById('quiz-card').classList.add('translate-y-20');
+        document.getElementById('quiz-card').classList.remove('scale-100');
+        document.getElementById('quiz-card').classList.add('scale-95');
         
         setTimeout(() => {
             panel.classList.add('hidden');
@@ -406,4 +441,7 @@
     init();
 </script>
 </body>
-</html
+</html>
+Pressing key...Getting DOM...Stopping...
+
+Stop Agent
